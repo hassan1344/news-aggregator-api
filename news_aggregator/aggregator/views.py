@@ -114,7 +114,7 @@ def search_news(request):
                             reddit_api_res = [{'headline': post["data"]["title"], 'link': post["data"]["url"], 'source': "reddit"} for post in reddit_api_data["data"]["children"]]
                             
                             for index,item in enumerate(reddit_api_res):
-                                news_article = NewsArticle.objects.filter(query = query, id=expired_news.data[index]["article"]).update(headline = item["headline"], link= item["link"], source= item["source"])
+                                news_article = NewsArticle.objects.filter(query = query, id=expired_news.data[index]["article"], source="reddit").update(headline = item["headline"], link= item["link"], source= item["source"])
                                 UserArticle.objects.filter(article_id=expired_news.data[index]["article"]).update(created_at=datetime.now(pytz.timezone('UTC')))
         
                             return Response(reddit_api_res, status=status.HTTP_200_OK)
@@ -124,7 +124,7 @@ def search_news(request):
                             news_api_res = [{'headline': article["title"], 'link': article["url"], 'source': "newsapi"} for article in news_api_data["articles"]]
                             
                             for index,item in enumerate(news_api_res):
-                                news_article = NewsArticle.objects.filter(query = query, id=expired_news.data[index]["article"]).update(headline = item["headline"], link= item["link"], source= item["source"])
+                                news_article = NewsArticle.objects.filter(query = query, id=expired_news.data[index]["article"], source="newsapi").update(headline = item["headline"], link= item["link"], source= item["source"])
                                 UserArticle.objects.filter(article_id=expired_news.data[index]["article"]).update(created_at=datetime.now(pytz.timezone('UTC')))
                             
                             return Response(news_api_res, status=status.HTTP_200_OK)
