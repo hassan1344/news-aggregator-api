@@ -13,7 +13,11 @@ from rest_framework.permissions import IsAuthenticated
 def fetch_news(request):
 
     try:
-        reddit_api_response= requests.get('{}?q="Pakistan"&sort=top&limit=10'.format(REDDIT_API_URL))
+        reddit_api_response= requests.get(
+                                '{}?q="Pakistan"&sort=top&limit=10'.format(REDDIT_API_URL),
+                                headers={'user-agent': 'your bot 0.1'}
+                                )
+        
         news_api_response= requests.get(
                                 '{}?q="Pakistan"&pageSize=10'.format(NEWS_API_URL),
                                 headers= {'Authorization': 'Bearer {}'.format(NEWS_API_SECRET)}
@@ -22,13 +26,13 @@ def fetch_news(request):
         if reddit_api_response.status_code == 200 and news_api_response.status_code == 200:
             reddit_api_data = reddit_api_response.json()
             news_api_data = news_api_response.json()
-            reddit_api_res = [{'headline': post["data"]["title"], 'link': post["data"]["url_overridden_by_dest"], 'source': "reddit"} for post in reddit_api_data["data"]["children"]]
+            reddit_api_res = [{'headline': post["data"]["title"], 'link': post["data"]["url"], 'source': "reddit"} for post in reddit_api_data["data"]["children"]]
             news_api_res = [{'headline': article["title"], 'link': article["url"], 'source': "newsapi"} for article in news_api_data["articles"]]
             return Response((news_api_res + reddit_api_res), status=status.HTTP_200_OK)
         
         elif reddit_api_response.status_code == 200:
             reddit_api_data = reddit_api_response.json()
-            reddit_api_res = [{'headline': post["data"]["title"], 'link': post["data"]["url_overridden_by_dest"], 'source': "reddit"} for post in reddit_api_data["data"]["children"]]
+            reddit_api_res = [{'headline': post["data"]["title"], 'link': post["data"]["url"], 'source': "reddit"} for post in reddit_api_data["data"]["children"]]
             return Response(reddit_api_res, status=status.HTTP_200_OK)
         
         elif news_api_response.status_code == 200:
@@ -39,5 +43,50 @@ def fetch_news(request):
         else:
             return Response({'error': 'Unable to retrieve news from any source.'}, status=status.HTTP_404_NOT_FOUND)
         
-    except Exception:
+    except Exception as e:
+        print(e)
         return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+
+
+@api_view(['GET'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def search_news(request):
+            try:
+                if 'query' not in request.GET:
+                    return Response({'error' : 'Invalid request parameter'}, status=status.HTTP_400_BAD_REQUEST)
+                
+                query = request.GET.get('query')
+                reddit_api_response= requests.get(
+                                        '{}?q="{}"&sort=top&limit=10'.format(REDDIT_API_URL,query),
+                                        headers={'user-agent': 'your bot 0.1'}
+                                        )
+                news_api_response= requests.get(
+                                        '{}?q="{}"&pageSize=10'.format(NEWS_API_URL,query),
+                                        headers= {'Authorization': 'Bearer {}'.format(NEWS_API_SECRET)}
+                                        )
+        
+                if reddit_api_response.status_code == 200 and news_api_response.status_code == 200:
+                    reddit_api_data = reddit_api_response.json()
+                    news_api_data = news_api_response.json()
+                    reddit_api_res = [{'headline': post["data"]["title"], 'link': post["data"]["url"], 'source': "reddit"} for post in reddit_api_data["data"]["children"]]
+                    news_api_res = [{'headline': article["title"], 'link': article["url"], 'source': "newsapi"} for article in news_api_data["articles"]]
+                    return Response((news_api_res + reddit_api_res), status=status.HTTP_200_OK)
+                
+                elif reddit_api_response.status_code == 200:
+                    reddit_api_data = reddit_api_response.json()
+                    reddit_api_res = [{'headline': post["data"]["title"], 'link': post["data"]["url"], 'source': "reddit"} for post in reddit_api_data["data"]["children"]]
+                    return Response(reddit_api_res, status=status.HTTP_200_OK)
+                
+                elif news_api_response.status_code == 200:
+                    news_api_data = news_api_response.json()
+                    news_api_res = [{'headline': article["title"], 'link': article["url"], 'source': "newsapi"} for article in news_api_data["articles"]]
+                    return Response(news_api_res, status=status.HTTP_200_OK)
+
+                else:
+                    return Response({'error': 'Unable to retrieve news from any source.'}, status=status.HTTP_404_NOT_FOUND)
+            
+            except Exception as e:
+                print(e)
+                return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
