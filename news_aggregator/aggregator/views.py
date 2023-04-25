@@ -93,7 +93,7 @@ def search_news(request):
                 news = UserArticle.objects.filter(user=str(request.user), query=query).first()
      
                 if news is not None:
-                    if news.created_at > expiry_time:
+                    if news.created_at < expiry_time:
                         print('expired')
                         expired_news = UserArticleSerializer(UserArticle.objects.filter(user=str(request.user),query=query),many=True)
     
