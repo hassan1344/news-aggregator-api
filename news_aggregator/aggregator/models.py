@@ -4,8 +4,7 @@ class NewsArticle(models.Model):
     class Meta:
         db_table="news_article"
 
-    title = models.CharField(max_length=200)
-    description = models.TextField()
+    headline = models.CharField(max_length=200)
     url = models.URLField()
     source = models.CharField(max_length=50)
 
