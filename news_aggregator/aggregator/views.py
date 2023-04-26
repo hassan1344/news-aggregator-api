@@ -19,10 +19,11 @@ def get_reddit_api_data(query=None):
                                 '{}?q="Pakistan"&sort=top&limit=10'.format(REDDIT_API_URL),
                                 headers={'user-agent': 'your bot 0.1'}
                                 )
-    reddit_api_response= requests.get(
-                                    '{}?q="{}"&sort=top&limit=10'.format(REDDIT_API_URL,query),
-                                    headers={'user-agent': 'your bot 0.1'}
-                                    )
+    else:
+        reddit_api_response= requests.get(
+                                        '{}?q="{}"&sort=top&limit=10'.format(REDDIT_API_URL,query),
+                                        headers={'user-agent': 'your bot 0.1'}
+                                        )
     return reddit_api_response
 #---------------------------------------------------------------------------------
 
@@ -33,10 +34,11 @@ def get_news_api_data(query=None):
                                 '{}?q="Pakistan"&pageSize=10'.format(NEWS_API_URL),
                                 headers= {'Authorization': 'Bearer {}'.format(NEWS_API_SECRET)}
                                 )
-    news_api_response= requests.get(
-                                    '{}?q="{}"&pageSize=10'.format(NEWS_API_URL,query),
-                                    headers= {'Authorization': 'Bearer {}'.format(NEWS_API_SECRET)}
-                                    )
+    else:
+        news_api_response= requests.get(
+                                        '{}?q="{}"&pageSize=10'.format(NEWS_API_URL,query),
+                                        headers= {'Authorization': 'Bearer {}'.format(NEWS_API_SECRET)}
+                                        )
     return news_api_response
 #------------------------------------------------------------------------------------
 
