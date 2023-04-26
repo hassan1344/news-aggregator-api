@@ -231,7 +231,6 @@ def process_favorite_news(request):
             if len(recent_favs) > 0:
                 result = []
                 for favs in recent_favs:
-                    print(favs)
                     fav_article_data = NewsArticleSerializer(NewsArticle.objects.filter(id=favs["article"]).first()).data
                     result.append({
                         "id" : favs["article"],
