@@ -14,12 +14,12 @@ This is a web application that aggregates news from various sources and displays
 6. Migrate the database: `python manage.py migrate`
 7. Create a superuser by running the following command : `python manage.py createsuperuser`.
 8. Enter your username and password. After that you can create as many users as you would like by logging into the admin panel (http://127.0.0.1:8000/admin) in the user table through the superuser.
-9. Create a .env file in your project folder `(news_aggregator)` and add the following key/value pairs : 
+9. Create a .env file in your Django project's folder `(news_aggregator)` directory and add the following key/value pairs : 
 
 REDDIT_API_URL="https://www.reddit.com/r/news/search.json"
 
 
-NEWS_API_URL="https://newsapi.org/v2/everything" <br>
+NEWS_API_URL="https://newsapi.org/v2/everything"
 
 
 NEWS_API_SECRET=  <Your API KEY>
