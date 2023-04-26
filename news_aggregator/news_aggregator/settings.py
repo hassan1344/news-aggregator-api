@@ -120,7 +120,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
+APPEND_SLASH=False
 
 REDDIT_API_URL= env('REDDIT_API_URL')
 NEWS_API_URL= env('NEWS_API_URL')
