@@ -13,7 +13,7 @@ This is a web application that aggregates news from various sources and displays
 5. Install the required packages: `pip install -r requirements.txt`
 6. Migrate the database: `python manage.py migrate`
 7. Create a superuser by running the following command : `python manage.py createsuperuser`.
-8. Enter your username and password. After that you can create as many users as you would like by logging into the admin panel (http://127.0.0.1:8000/admin) in the user table.
+8. Enter your username and password. After that you can create as many users as you would like by logging into the admin panel (http://127.0.0.1:8000/admin) in the user table through the superuser.
 9. Create a .env file in your project folder `(news_aggregator)` and add the following key/value pairs : 
 
 REDDIT_API_URL="https://www.reddit.com/r/news/search.json"
