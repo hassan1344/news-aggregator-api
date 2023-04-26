@@ -179,3 +179,41 @@ def search_news(request):
             except Exception as e:
                 print(e)
                 return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@authentication_classes([BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def mark_as_favorite(request):
+    try:
+        if 'user' not in request.GET or 'id' not in request.GET:
+            return Response({'error' : 'Invalid request parameter'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = request.GET.get('user')
+        id = request.GET.get('id')
+
+        user_article = UserArticle.objects.filter(user=user, article_id=id).first()
+        if user_article:
+            news_article = NewsArticle.objects.filter(id=user_article.article_id).first()
+
+            if user_article.favorite == True:
+                user_article.favorite = False
+            else:
+                user_article.favorite = True
+
+            user_article.updated_at = datetime.now(pytz.timezone('UTC'))
+            user_article.save()
+            return Response({
+                    "user" : user,
+                    "favorite" : user_article.favorite,
+                    "id" : int(id),
+                    "headline" : news_article.headline,
+                    "link" : news_article.link,
+                    "source" : news_article.source
+                }, status=status.HTTP_200_OK)
+        
+        return Response({"error" : "user or article not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    except Exception as e:
+        print(e)
+        return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
