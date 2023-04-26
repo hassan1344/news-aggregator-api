@@ -16,8 +16,8 @@ This is a web application that aggregates news from various sources and displays
 8. Enter your username and password. After that you can create as many users as you would like by logging into the admin panel (http://127.0.0.1:8000/admin) in the user table.
 9. Create a .env file in your project folder `(news_aggregator)` and add the following key/value pairs : 
 
-`REDDIT_API_URL="https://www.reddit.com/r/news/search.json"
-NEWS_API_URL="https://newsapi.org/v2/everything"
+`REDDIT_API_URL="https://www.reddit.com/r/news/search.json" <br>
+NEWS_API_URL="https://newsapi.org/v2/everything" <br>
 NEWS_API_SECRET=  <Your API KEY>`
 
 You can get your API key by creating a free account on `https://newsapi.org/`
