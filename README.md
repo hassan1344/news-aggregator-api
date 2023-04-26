@@ -22,7 +22,7 @@ REDDIT_API_URL="https://www.reddit.com/r/news/search.json"
 NEWS_API_URL="https://newsapi.org/v2/everything"
 
 
-NEWS_API_SECRET=  <Your API KEY>
+NEWS_API_SECRET=  `<Your API KEY>`
 
   
 You can get your API key by creating a free account on `https://newsapi.org/`
