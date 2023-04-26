@@ -10,7 +10,7 @@ from aggregator.serializers import NewsArticleSerializer,UserArticleSerializer
 from datetime import datetime, timedelta
 import pytz
 
-
+#--------------Getting data from reddit API------------------------------------
 def get_reddit_api_data(query=None):
 
     if query == None:
@@ -24,7 +24,9 @@ def get_reddit_api_data(query=None):
                                     headers={'user-agent': 'your bot 0.1'}
                                     )
     return reddit_api_response
+#---------------------------------------------------------------------------------
 
+#-------------Getting data from News API------------------------------------------
 def get_news_api_data(query=None):
     if query == None:
         news_api_response= requests.get(
@@ -36,12 +38,13 @@ def get_news_api_data(query=None):
                                     headers= {'Authorization': 'Bearer {}'.format(NEWS_API_SECRET)}
                                     )
     return news_api_response
-
+#------------------------------------------------------------------------------------
 
 @api_view(['GET'])
 @authentication_classes([BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def fetch_news(request):
+#----------------------Search News (/news?query=)----------------------------------------------------------------------------------------------------------------
     if request.GET:
         try:
             if 'query' not in request.GET:
@@ -143,7 +146,9 @@ def fetch_news(request):
         except Exception as e:
             print(e)
             return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+#-------------------------------------------------------------------------------------------------------------------------------------------------------    
+
+#-----------------Fetch General News (/news)----------------------------------------------------------------------------------------------------------   
     else:
         try:
             reddit_api_response= get_reddit_api_data()
@@ -172,12 +177,13 @@ def fetch_news(request):
         except Exception as e:
             print(e)
             return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+#----------------------------------------------------------------------------------------------------------------------------------------------------    
 
 @api_view(['GET','POST'])
 @authentication_classes([BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def process_favorite_news(request):
+#--------------------------Mark User Articles as Favorite or vice versa ( /news/favourite?user= &id= )------------------------------------------------
     if request.method == 'POST':
         try:
             if 'user' not in request.GET or 'id' not in request.GET:
@@ -211,7 +217,9 @@ def process_favorite_news(request):
         except Exception as e:
             print(e)
             return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+#------------------------------------------------------------------------------------------------------------------------------------------------   
+
+#---------------------------------------Get most recently favourited articles of user ( /news/favourite?user= )----------------------------------------
     elif request.method == 'GET':
         try:
             if 'user' not in request.GET:
@@ -239,3 +247,4 @@ def process_favorite_news(request):
         except Exception as e:
             print(e)
             return Response({'error': 'Something went wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#--------------------------------------------------------------------------------------------------------------------------------------------------
