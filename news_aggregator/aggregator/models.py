@@ -19,3 +19,4 @@ class UserArticle(models.Model):
     article = models.ForeignKey(NewsArticle, on_delete=models.CASCADE)
     favorite = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
